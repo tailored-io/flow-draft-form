@@ -155,7 +155,6 @@
         "properties": {
           "name": {
             "type": "string",
-            "minLength": 1
           },
           "type": {
             "$ref": "#/definitions/blockType"
@@ -171,11 +170,9 @@
           },
           "selector": {
             "type": "string",
-            "minLength": 1
           },
           "default": {
             "type": "string",
-            "minLength": 1
           }
         },
         "required": [
@@ -204,7 +201,6 @@
           "properties": {
             "name": {
               "type": "string",
-              "minLength": 1
             },
             "type": {
               "$ref": "#/definitions/variableType"
@@ -214,19 +210,15 @@
             },
             "attributes": {
               "type": "string",
-              "minLength": 1
             },
             "hint": {
               "type": "string",
-              "minLength": 1
             },
             "clarification": {
               "type": "string",
-              "minLength": 1
             },
             "default": {
               "type": "string",
-              "minLength": 1
             }
           },
           "required": [
@@ -248,7 +240,6 @@
           "properties": {
             "name": {
               "type": "string",
-              "minLength": 1
             },
             "urlMatching": {
               "type": "array",
@@ -275,7 +266,6 @@
                 "properties": {
                   "name": {
                     "type": "string",
-                    "minLength": 1
                   },
                   "start": {
                     "type": "number"
@@ -285,18 +275,15 @@
                   },
                   "bodySelector": {
                     "type": "string",
-                    "minLength": 1
                   },
                   "rowSelector": {
                     "type": "string",
-                    "minLength": 1
                   },
                   "cells": {
                     "type": "object",
                     "properties": {
                       "name": {
                         "type": "string",
-                        "minLength": 1
                       },
                       "type": {
                         "$ref": "#/definitions/blockType"
@@ -306,11 +293,9 @@
                       },
                       "selector": {
                         "type": "string",
-                        "minLength": 1
                       },
                       "default": {
                         "type": "string",
-                        "minLength": 1
                       }
                     },
                     "required": [
