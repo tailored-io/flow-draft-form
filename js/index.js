@@ -1,4 +1,4 @@
-import SCHEMA from "./schema.js";
+import SCHEMA from "./schema.json" assert { type: "json" };
 
 // parse url -> merge options -> refreshUI() -> initJsoneditor() -> direct link
 
