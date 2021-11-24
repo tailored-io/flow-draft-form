@@ -3,6 +3,17 @@
   "title": "Flow draft",
   "description": "Input for Flow parser",
   "definitions": {
+    "AssetPackDimensions": {
+      "type": "string",
+      "enum": [
+        "PX_1280_720",
+        "PX_1440_810",
+        "PX_1920_1080",
+        "PX_2560_1440",
+        "PX_3840_2160",
+        "CUSTOM"
+      ]
+    },
     "BlockAction": {
       "type": "string",
       "enum": [
@@ -85,10 +96,10 @@
         "type": {
           "$ref": "#/definitions/BlockType"
         },
-        "transient": {
+        "isTransient": {
           "type": "boolean"
         },
-        "required": {
+        "isRequired": {
           "type": "boolean"
         },
         "action": {
@@ -97,7 +108,7 @@
         "selector": {
           "type": "string"
         },
-        "default": {
+        "defaultValue": {
           "type": "string"
         }
       },
@@ -231,6 +242,7 @@
           ]
         },
         "instructions": {
+          "description": "Free form description of actions to be performed",
           "type": "array",
           "items": {
             "type": "string"
@@ -288,6 +300,9 @@
         "lastName": {
           "type": "string"
         },
+        "email": {
+          "type": "string"
+        },
         "avatarSrc": {
           "type": "string",
           "format": "uri"
@@ -295,7 +310,8 @@
       },
       "required": [
         "firstName",
-        "lastName"
+        "lastName",
+        "email"
       ]
     },
     "Variable": {
@@ -307,11 +323,12 @@
           "type": {
             "$ref": "#/definitions/VariableType"
           },
-          "transient": {
+          "isTransient": {
             "type": "boolean"
           },
           "attributes": {
-            "type": "string"
+            "type": "string",
+            "description": "e.g. \"Mock 20 people\" or \"Image dimensions is 100x100\""
           },
           "hint": {
             "type": "string"
@@ -319,7 +336,7 @@
           "clarification": {
             "type": "string"
           },
-          "default": {
+          "defaultValue": {
             "type": "string"
           }
         },
@@ -366,6 +383,39 @@
       "$ref": "#/definitions/FlowStatus",
       "default": "DRAFT"
     },
+    "sessionSettings": {
+      "type": "object",
+      "properties": {
+        "productTour": {
+          "type": "object",
+          "properties": {
+            "dimensions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "$ref": "#/definitions/AssetPackDimensions"
+                  },
+                  "customValue": {
+                    "type": "string",
+                    "description": "Actual value for option \"Custom\", e.g. 1340x580"
+                  },
+                  "preferred": {
+                    "type": "boolean",
+                    "default": true
+                  }
+                },
+                "required": [
+                  "value",
+                  "preferred"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
     "blocks": {
       "type": "array",
       "description": "Global blocks",
@@ -381,13 +431,10 @@
     },
     "steps": {
       "type": "array",
+      "minItems": 1,
       "items": {
         "$ref": "#/definitions/Step"
       }
-    },
-    "useStepSnapshot": {
-      "type": "boolean",
-      "default": true
     }
   },
   "required": [
