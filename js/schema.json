@@ -3,34 +3,87 @@
   "title": "Flow draft",
   "description": "Input for Flow parser",
   "definitions": {
-    "blockAction": {
+    "BlockAction": {
       "type": "string",
       "enum": [
-        "modify",
-        "remove",
-        "freeze",
-        "obfuscate"
+        "MODIFY",
+        "REMOVE",
+        "FREEZE",
+        "SUBSTITUTE",
+        "OBFUSCATE"
       ]
     },
-    "blockType": {
+    "BlockType": {
       "type": "string",
       "enum": [
-        "text",
-        "image",
-        "link",
-        "button",
-        "list",
-        "composite"
+        "TEXT",
+        "IMAGE",
+        "LIST",
+        "LINK",
+        "COMPOSITE",
+        "CANVAS",
+        "BUTTON"
       ]
     },
-    "block": {
+    "FlowStatus": {
+      "type": "string",
+      "enum": [
+        "DRAFT",
+        "ASSET_PACK_READY",
+        "READY"
+      ]
+    },
+    "StepMatcherType": {
+      "type": "string",
+      "enum": [
+        "URL_EQUALS",
+        "URL_MATCHES",
+        "URL_EXPERT"
+      ]
+    },
+    "StepMatcherRuleType": {
+      "type": "string",
+      "enum": [
+        "EQUALS_EXACT",
+        "MATCHES_EXACT",
+        "MATCHES_ANY",
+        "EXPERT_REGEX"
+      ]
+    },
+    "StepMatcherRuleTargetType": {
+      "type": "string",
+      "enum": [
+        "PATH",
+        "SEARCH",
+        "HASH"
+      ]
+    },
+    "StepSnapshotStatus": {
+      "type": "string",
+      "enum": [
+        "PROCESSING",
+        "COMPLETED",
+        "FAILED"
+      ]
+    },
+    "VariableType": {
+      "type": "string",
+      "enum": [
+        "TEXT",
+        "IMAGE",
+        "COLLECTION",
+        "LOCATION",
+        "COLOR"
+      ]
+    },
+    "Block": {
       "type": "object",
       "properties": {
         "name": {
           "type": "string"
         },
         "type": {
-          "$ref": "#/definitions/blockType"
+          "$ref": "#/definitions/BlockType"
         },
         "transient": {
           "type": "boolean"
@@ -39,7 +92,7 @@
           "type": "boolean"
         },
         "action": {
-          "$ref": "#/definitions/blockAction"
+          "$ref": "#/definitions/BlockAction"
         },
         "selector": {
           "type": "string"
@@ -55,23 +108,197 @@
         "selector"
       ]
     },
-    "variableType": {
-      "type": "string",
-      "enum": [
-        "text",
-        "image",
-        "collection",
-        "location"
+    "Logo": {
+      "type": "object",
+      "properties": {
+        "symbolicSrc": {
+          "type": "string",
+          "format": "uri"
+        },
+        "fullSrc": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "symbolicSrc",
+        "fullSrc"
       ]
-    }
-  },
-  "type": "object",
-  "properties": {
-    "name": {
-      "type": "string"
     },
-    "variables": {
-      "type": "array",
+    "RepeatingGroupCell": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/BlockType"
+        },
+        "action": {
+          "$ref": "#/definitions/BlockAction"
+        },
+        "selector": {
+          "type": "string"
+        },
+        "default": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "type",
+        "action",
+        "selector"
+      ]
+    },
+    "RepeatingGroup": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "start": {
+          "type": "number"
+        },
+        "target": {
+          "type": "number"
+        },
+        "bodySelector": {
+          "type": "string"
+        },
+        "rowSelector": {
+          "type": "string"
+        },
+        "cells": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RepeatingGroupCell"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "start",
+        "target",
+        "bodySelector",
+        "rowSelector",
+        "cells"
+      ]
+    },
+    "Step": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "urlMatching": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "$ref": "#/definitions/StepMatcherType"
+            },
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "rules": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "$ref": "#/definitions/StepMatcherRuleType"
+                  },
+                  "value": {
+                    "type": "string"
+                  },
+                  "target": {
+                    "$ref": "#/definitions/StepMatcherRuleTargetType"
+                  },
+                  "sequence": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "type",
+                  "value"
+                ]
+              }
+            }
+          },
+          "required": [
+            "url",
+            "rules"
+          ]
+        },
+        "instructions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "blocks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Block"
+          }
+        },
+        "repeatingGroups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RepeatingGroup"
+          }
+        },
+        "snapshot": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "$ref": "#/definitions/StepSnapshotStatus",
+              "default": "COMPLETED"
+            },
+            "snapshotPage": {
+              "type": "string",
+              "format": "uri"
+            },
+            "useSnapshot": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        },
+        "status": {
+          "$ref": "#/definitions/FlowStatus",
+          "default": "DRAFT"
+        },
+        "thumbSrc": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "name",
+        "urlMatching"
+      ]
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "avatarSrc": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "firstName",
+        "lastName"
+      ]
+    },
+    "Variable": {
       "items": {
         "type": "object",
         "properties": {
@@ -79,7 +306,7 @@
             "type": "string"
           },
           "type": {
-            "$ref": "#/definitions/variableType"
+            "$ref": "#/definitions/VariableType"
           },
           "transient": {
             "type": "boolean"
@@ -102,105 +329,72 @@
           "type"
         ]
       }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
     },
-    "globalBlocks": {
+    "description": {
+      "type": "string"
+    },
+    "baseUrl": {
+      "type": "string",
+      "format": "uri"
+    },
+    "username": {
+      "type": "string"
+    },
+    "password": {
+      "type": "string"
+    },
+    "tenantSetup": {
+      "type": "object",
+      "properties": {
+        "logo": {
+          "$ref": "#/definitions/Logo"
+        },
+        "presenter": {
+          "$ref": "#/definitions/User"
+        }
+      },
+      "required": [
+        "logo",
+        "presenter"
+      ]
+    },
+    "status": {
+      "$ref": "#/definitions/FlowStatus",
+      "default": "DRAFT"
+    },
+    "blocks": {
+      "type": "array",
+      "description": "Global blocks",
+      "items": {
+        "$ref": "#/definitions/Block"
+      }
+    },
+    "variables": {
       "type": "array",
       "items": {
-        "$ref": "#/definitions/block"
+        "$ref": "#/definitions/Variable"
       }
     },
     "steps": {
       "type": "array",
       "items": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "urlMatching": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "instructions": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "blocks": {
-            "type": "array",
-            "items": {
-              "$ref": "#/definitions/block"
-            }
-          },
-          "repeatingGroups": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "start": {
-                  "type": "number"
-                },
-                "target": {
-                  "type": "number"
-                },
-                "bodySelector": {
-                  "type": "string"
-                },
-                "rowSelector": {
-                  "type": "string"
-                },
-                "cells": {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string"
-                    },
-                    "type": {
-                      "$ref": "#/definitions/blockType"
-                    },
-                    "action": {
-                      "$ref": "#/definitions/blockAction"
-                    },
-                    "selector": {
-                      "type": "string"
-                    },
-                    "default": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "type",
-                    "action",
-                    "selector"
-                  ]
-                }
-              },
-              "required": [
-                "name",
-                "start",
-                "target",
-                "bodySelector",
-                "rowSelector",
-                "cells"
-              ]
-            }
-          }
-        },
-        "required": [
-          "name",
-          "urlMatching"
-        ]
+        "$ref": "#/definitions/Step"
       }
+    },
+    "useStepSnapshot": {
+      "type": "boolean",
+      "default": true
     }
   },
   "required": [
+    "name",
+    "baseUrl",
     "steps"
   ]
 }

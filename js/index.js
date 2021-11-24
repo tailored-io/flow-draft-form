@@ -15,22 +15,15 @@ const defaultOptions = {
   enable_array_copy: true,
   disable_edit_json: true,
   disable_properties: true,
+  no_additional_properties: true,
   theme: "bootstrap3",
   iconlib: "fontawesome5",
 };
 
 const directLink = document.querySelector("#direct-link");
-function updateDirectLink() {
-  const { options, ...dataToSave } = data;
-  const dataString = LZString.compressToBase64(JSON.stringify(dataToSave));
-
-  const url = `${window.location.href.replace(/\?.*/, "")}?data=${dataString}`;
-
-  navigator.clipboard.writeText(url);
-
-  directLink.href = url;
-}
-directLink.addEventListener("click", updateDirectLink);
+directLink.addEventListener("click", () =>
+  navigator.clipboard.writeText(window.location.href)
+);
 
 const setValue = document.querySelector("#setvalue");
 setValue.addEventListener("click", () => {
@@ -44,8 +37,6 @@ function setOutputTextArea(value) {
   outputTextarea.value = value ? JSON.stringify(value, null, 2) : "";
   data.output = value;
 }
-
-/* -------------------------------------------------------------- parse url */
 
 function parseUrl() {
   const url = window.location.search;
@@ -75,14 +66,10 @@ function parseUrl() {
   mergeOptions();
 }
 
-/* ----------------------------------------------------------- mergeOptions */
-
 function mergeOptions() {
   data.options = Object.assign(defaultOptions, data.options);
   refreshUI();
 }
-
-/* -------------------------------------------------------------- refreshUI */
 
 function refreshUI() {
   // output
@@ -90,8 +77,6 @@ function refreshUI() {
 
   initJsoneditor();
 }
-
-/* --------------------------------------------------------- initJsoneditor */
 
 function initJsoneditor() {
   // destroy old JSONEditor instance if exists
@@ -117,9 +102,18 @@ function initJsoneditor() {
     } else {
       validateTextarea.value = "valid";
     }
-  });
 
-  updateDirectLink();
+    updateLocation();
+  });
+}
+
+function updateLocation() {
+  const { options, ...dataToSave } = data;
+  const dataString = LZString.compressToBase64(JSON.stringify(dataToSave));
+
+  const url = `${window.location.href.replace(/\?.*/, "")}?data=${dataString}`;
+
+  window.history.replaceState(null, "", url);
 }
 
 parseUrl();
