@@ -299,7 +299,6 @@
       ]
     },
     "Variable": {
-      "items": {
         "type": "object",
         "properties": {
           "name": {
@@ -328,7 +327,6 @@
           "name",
           "type"
         ]
-      }
     }
   },
   "type": "object",

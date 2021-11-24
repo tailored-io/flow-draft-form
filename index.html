@@ -6,28 +6,39 @@
   <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
   <script type="module" src="js/index.js"></script>
-  <link rel='stylesheet' href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <link rel='stylesheet' href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
 </head>
 <body>
-<div class='container-fluid grid-xl'>
+<div class="container-fluid grid-xl">
   <div class="row columns md:flex">
-    <div class='col-8 col-md-8 w-8/12'>
+    <div class="col-8 col-md-8 w-8/12">
       <h1>Flow draft form</h1>
       <div id="json-editor-form"></div>
     </div>
-    <div class='col-4 col-md-4 w-4/12'>
-      <div>
-        <a class="btn btn-primary" id="direct-link">Copy Link</a>
-        <a class="btn btn-secondary" href="?">Reset</a>
-      </div>
+    <div class="col-4 col-md-4 w-4/12">
       <h2>Output</h2>
+      <div class="row">
+        <div class="col-6 col-md-6">
+          <a class="btn btn-primary btn-block" id="direct-link">Copy link</a>
+        </div>
+        <div class="col-6 col-md-6">
+          <a class="btn btn-danger btn-block" href="?">Reset</a>
+        </div>
+      </div>
+      <div class="row" style="margin-top:20px;">
+        <div class="col-6 col-md-6">
+          <button class="btn btn-primary btn-block" id="copyoutput">Copy output</button>
+        </div>
+        <div class="col-6 col-md-6">
+          <button class="btn btn-secondary btn-block" id="setvalue">Update form from output</button>
+        </div>
+      </div>
       <label for="output-textarea"></label>
-      <button class='btn btn-primary btn-block' id='setvalue'>Update Form</button>
-      <textarea id='output-textarea' rows="15" style="width: 100%; font-family: monospace;"
-                class='form-control'></textarea>
+      <textarea id="output-textarea" rows="30" style="width: 100%; font-family: monospace;"
+                class="form-control"></textarea>
       <h2>Validation</h2>
-      <textarea id='validate-textarea' rows="15" readonly disabled class='form-control'></textarea>
+      <textarea id="validate-textarea" rows="10" readonly disabled class="form-control"></textarea>
     </div>
   </div>
 </div>

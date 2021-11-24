@@ -25,11 +25,6 @@ directLink.addEventListener("click", () =>
   navigator.clipboard.writeText(window.location.href)
 );
 
-const setValue = document.querySelector("#setvalue");
-setValue.addEventListener("click", () => {
-  jsoneditor.setValue(JSON.parse(outputTextarea.value));
-});
-
 const validateTextarea = document.querySelector("#validate-textarea");
 
 const outputTextarea = document.querySelector("#output-textarea");
@@ -37,6 +32,16 @@ function setOutputTextArea(value) {
   outputTextarea.value = value ? JSON.stringify(value, null, 2) : "";
   data.output = value;
 }
+
+const copyOutput = document.querySelector("#copyoutput");
+copyOutput.addEventListener("click", () =>
+  navigator.clipboard.writeText(outputTextarea.value)
+);
+
+const setValue = document.querySelector("#setvalue");
+setValue.addEventListener("click", () => {
+  jsoneditor.setValue(JSON.parse(outputTextarea.value));
+});
 
 function parseUrl() {
   const url = window.location.search;
@@ -100,7 +105,7 @@ function initJsoneditor() {
     if (validationErrors.length) {
       validateTextarea.value = JSON.stringify(validationErrors, null, 2);
     } else {
-      validateTextarea.value = "valid";
+      validateTextarea.value = "No validation errors";
     }
 
     updateLocation();
