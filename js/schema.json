@@ -201,6 +201,31 @@
         "name": {
           "type": "string"
         },
+        "status": {
+          "$ref": "#/definitions/FlowStatus",
+          "default": "DRAFT"
+        },
+        "thumbSrc": {
+          "type": "string",
+          "format": "uri"
+        },
+        "snapshot": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "$ref": "#/definitions/StepSnapshotStatus",
+              "default": "COMPLETED"
+            },
+            "snapshotPage": {
+              "type": "string",
+              "format": "uri"
+            },
+            "useSnapshot": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        },
         "urlMatching": {
           "type": "object",
           "properties": {
@@ -259,31 +284,6 @@
           "items": {
             "$ref": "#/definitions/RepeatingGroup"
           }
-        },
-        "snapshot": {
-          "type": "object",
-          "properties": {
-            "status": {
-              "$ref": "#/definitions/StepSnapshotStatus",
-              "default": "COMPLETED"
-            },
-            "snapshotPage": {
-              "type": "string",
-              "format": "uri"
-            },
-            "useSnapshot": {
-              "type": "boolean",
-              "default": true
-            }
-          }
-        },
-        "status": {
-          "$ref": "#/definitions/FlowStatus",
-          "default": "DRAFT"
-        },
-        "thumbSrc": {
-          "type": "string",
-          "format": "uri"
         }
       },
       "required": [
@@ -367,6 +367,9 @@
     "tenantSetup": {
       "type": "object",
       "properties": {
+        "name": {
+          "type": "string"
+        },
         "logo": {
           "$ref": "#/definitions/Logo"
         },
@@ -378,10 +381,6 @@
         "logo",
         "presenter"
       ]
-    },
-    "status": {
-      "$ref": "#/definitions/FlowStatus",
-      "default": "DRAFT"
     },
     "sessionSettings": {
       "type": "object",
@@ -416,17 +415,17 @@
         }
       }
     },
+    "variables": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Variable"
+      }
+    },
     "blocks": {
       "type": "array",
       "description": "Global blocks",
       "items": {
         "$ref": "#/definitions/Block"
-      }
-    },
-    "variables": {
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/Variable"
       }
     },
     "steps": {
