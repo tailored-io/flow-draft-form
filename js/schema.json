@@ -410,6 +410,9 @@
                   "preferred"
                 ]
               }
+            },
+            "useSnapshot": {
+              "type": "boolean"
             }
           }
         }
