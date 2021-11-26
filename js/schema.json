@@ -6,11 +6,11 @@
     "AssetPackDimensions": {
       "type": "string",
       "enum": [
-        "PX_1280_720",
-        "PX_1440_810",
-        "PX_1920_1080",
-        "PX_2560_1440",
-        "PX_3840_2160",
+        "1280_720_PX",
+        "1440_810_PX",
+        "1920_1080_PX",
+        "2560_1440_PX",
+        "3840_2160_PX",
         "CUSTOM"
       ]
     },
@@ -67,6 +67,27 @@
         "PATH",
         "SEARCH",
         "HASH"
+      ]
+    },
+    "StepMatchingRule": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/StepMatcherRuleType"
+        },
+        "value": {
+          "type": "string"
+        },
+        "target": {
+          "$ref": "#/definitions/StepMatcherRuleTargetType"
+        },
+        "sequence": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "type",
+        "value"
       ]
     },
     "StepSnapshotStatus": {
@@ -195,6 +216,45 @@
         "cells"
       ]
     },
+    "SessionSettings": {
+      "type": "object",
+      "properties": {
+        "productTour": {
+          "type": "object",
+          "properties": {
+            "dimensions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "$ref": "#/definitions/AssetPackDimensions"
+                  },
+                  "customValue": {
+                    "type": "string",
+                    "description": "Actual value for option \"Custom\", e.g. 1340x580"
+                  },
+                  "preferred": {
+                    "type": "boolean",
+                    "default": true
+                  }
+                },
+                "required": [
+                  "value",
+                  "preferred"
+                ]
+              }
+            },
+            "useSnapshot": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "required": ["dimensions"]
+        }
+      },
+      "required": ["productTour"]
+    },
     "Step": {
       "type": "object",
       "properties": {
@@ -239,25 +299,7 @@
             "rules": {
               "type": "array",
               "items": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "$ref": "#/definitions/StepMatcherRuleType"
-                  },
-                  "value": {
-                    "type": "string"
-                  },
-                  "target": {
-                    "$ref": "#/definitions/StepMatcherRuleTargetType"
-                  },
-                  "sequence": {
-                    "type": "number"
-                  }
-                },
-                "required": [
-                  "type",
-                  "value"
-                ]
+                "$ref": "#/definitions/StepMatchingRule"
               }
             }
           },
@@ -378,45 +420,13 @@
         }
       },
       "required": [
+        "name",
         "logo",
         "presenter"
       ]
     },
     "sessionSettings": {
-      "type": "object",
-      "properties": {
-        "productTour": {
-          "type": "object",
-          "properties": {
-            "dimensions": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "value": {
-                    "$ref": "#/definitions/AssetPackDimensions"
-                  },
-                  "customValue": {
-                    "type": "string",
-                    "description": "Actual value for option \"Custom\", e.g. 1340x580"
-                  },
-                  "preferred": {
-                    "type": "boolean",
-                    "default": true
-                  }
-                },
-                "required": [
-                  "value",
-                  "preferred"
-                ]
-              }
-            },
-            "useSnapshot": {
-              "type": "boolean"
-            }
-          }
-        }
-      }
+      "$ref": "#/definitions/SessionSettings"
     },
     "variables": {
       "type": "array",
@@ -442,6 +452,8 @@
   "required": [
     "name",
     "baseUrl",
+    "tenantSetup",
+    "sessionSettings",
     "steps"
   ]
 }
