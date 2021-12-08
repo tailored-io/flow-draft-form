@@ -183,6 +183,22 @@
         "selector"
       ]
     },
+    "RepeatingGroupRow": {
+      "type": "object",
+      "properties": {
+        "repeatable": {
+          "type": "boolean",
+          "default": true
+        },
+        "cells": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RepeatingGroupCell"
+          }
+        }
+      },
+      "required": ["repeatable", "cells"]
+    },
     "RepeatingGroup": {
       "properties": {
         "name": {
@@ -192,7 +208,8 @@
           "type": "number"
         },
         "target": {
-          "type": "number"
+          "type": "number",
+          "default": 10
         },
         "bodySelector": {
           "type": "string"
@@ -200,10 +217,10 @@
         "rowSelector": {
           "type": "string"
         },
-        "cells": {
+        "rows": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/RepeatingGroupCell"
+            "$ref": "#/definitions/RepeatingGroupRow"
           }
         }
       },
@@ -213,7 +230,7 @@
         "target",
         "bodySelector",
         "rowSelector",
-        "cells"
+        "rows"
       ]
     },
     "SessionSettings": {
