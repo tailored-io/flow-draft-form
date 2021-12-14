@@ -1,0 +1,64 @@
+.je-object__container:not([data-schemaid="root"]) { /* padding-left:20px; */
+}
+
+.well {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  border: 0;
+  border-left: 3px solid pink;
+  padding-left: 20px;
+  margin-bottom: 10px;
+}
+
+div[data-schemaid="root"] > .well {
+  padding-left: 20px
+}
+
+label {
+  font-weight: 400;
+}
+
+.json-editor-btn-collapse {
+  background: transparent;
+  border: 0;
+  margin: 0 0 0 -15px; /* padding: 0 12px; */
+}
+
+h3 {
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+h3 label {
+  font-weight: 500;
+}
+
+.form-group {
+  margin-bottom: 4px
+}
+
+.form-group .help-block,
+.form-group label {
+  font-size: 11px;
+}
+
+div[data-schematype="array"] {
+  margin-left: 0px;
+}
+
+.je-object__container .btn i {
+  font-size: 14px;
+}
+
+.btn-group:last-child {
+  margin-top: 10px;
+}
+
+.je-object__container > .btn-group {
+  visibility: hidden;
+  margin-top: 0;
+}
+
+.je-object__container:hover > .btn-group {
+  visibility: visible;
+}
