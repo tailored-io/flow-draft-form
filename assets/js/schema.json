@@ -347,7 +347,10 @@
       },
       "required": [
         "name",
-        "urlMatching"
+        "urlMatching",
+        "blocks",
+        "repeatingGroups",
+        "instructions"
       ]
     },
     "User": {
@@ -471,6 +474,8 @@
     "baseUrl",
     "tenantSetup",
     "sessionSettings",
-    "steps"
+    "blocks",
+    "steps",
+    "variables"
   ]
 }

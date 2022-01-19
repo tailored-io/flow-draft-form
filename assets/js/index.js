@@ -121,4 +121,72 @@ function updateLocation() {
   window.history.replaceState(null, "", url);
 }
 
+let flows;
+const flowForm = document.querySelector("#flow-form");
+const flowDropdown = document.querySelector("#flow-dropdown");
+flowDropdown.addEventListener("change", (e) => {
+  const flow = flows.get(e.target.value);
+  setOutputTextArea(flow);
+});
+
+const loginForm = document.querySelector("#login-form");
+const envSelect = document.querySelector("#env-select");
+const usernameField = document.querySelector("#username");
+const passwordField = document.querySelector("#password");
+const loginButton = document.querySelector("#login");
+loginButton.addEventListener("click", async () => {
+  loginButton.setAttribute("disabled", "");
+
+  try {
+    const apiUrl = envSelect.options[envSelect.selectedIndex].value + "/api";
+    const loginUrl = apiUrl + "/login";
+    const username = usernameField.value;
+    const password = passwordField.value;
+    const jsonMimeType = "application/json";
+    const credentials = await (
+      await fetch(loginUrl, {
+        method: "POST",
+        headers: {
+          Accept: jsonMimeType,
+          "Content-Type": jsonMimeType,
+        },
+        body: JSON.stringify({
+          username,
+          password,
+        }),
+      })
+    ).json();
+
+    const flowsUrl = new URL(apiUrl + "/flows");
+    flowsUrl.searchParams.append("partial", "FLOW_LIST");
+    flowsUrl.searchParams.append("status", "DRAFT");
+    const flowResponse = await (
+      await fetch(flowsUrl.toString(), {
+        method: "GET",
+        headers: {
+          Accept: jsonMimeType,
+          Authorization: `Bearer ${credentials.accessToken}`,
+          "Content-Type": jsonMimeType,
+        },
+      })
+    ).json();
+
+    flows = new Map(flowResponse.items.map((f) => [f.id, f]));
+
+    for (const flow of flows.values()) {
+      const option = document.createElement("option");
+      option.text = `${flow.name} (${flow.baseUrl})`;
+      option.value = flow.id;
+
+      flowDropdown.append(option);
+    }
+
+    loginForm.style.display = "none";
+    flowForm.style.display = "block";
+  } catch (e) {
+    console.error(`Error fetching data`, e);
+    loginButton.removeAttribute("disabled");
+  }
+});
+
 parseUrl();
